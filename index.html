@@ -31,7 +31,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: lightblue;
             text-align: center;
             width: 4.24px;
             height: 9.36px;
@@ -47,12 +46,9 @@
         }
 
         #canvas {
-            width: 95%;
             height: 95%;
             grid-template-columns: repeat(64, 9.64px);
             grid-template-rows: repeat(64, 10.39px);
-            border: 1px solid black;
-            box-sizing: border-box;
         }
 
         .square {
@@ -70,19 +66,13 @@
         }
 
         #canvas {
-            width: 95%;
-            height: 95%;
             grid-template-columns: repeat(64, 12.61px);
             grid-template-rows: repeat(64, 10.39px);
-            border: 1px solid black;
-            box-sizing: border-box;
         }
 
         .square {
             width: 12.61px;
             height: 10.39px;
-            border: 0.42px solid red;
-            font-size: 8px;
         }
     }
 
@@ -93,33 +83,27 @@
         }
 
         #canvas {
-            width: 95%;
-            height: 95%;
             grid-template-columns: repeat(64, 18.40px);
             grid-template-rows: repeat(64, 10.39px);
-            border: 1px solid black;
-            box-sizing: border-box;
         }
 
         .square {
             width: 18.40px;
             height: 10.39px;
-            border: 0.42px solid red;
-            font-size: 8px;
         }
     }
     
     </style>
 </head>
-<body class="bg-warning-subtle w-100">
-    <header class="border bg-dark text-light text-center">
+<body class='bg-warning-subtle w-100'>
+    <header class='border bg-dark text-light text-center'>
         <h1 class='my-5 text-center'>World Generator</h1>
     </header>
     <main class='d-flex flex-column align-items-center w-100'>
         <h2 class='my-5'>Configurations of the generator</h2>
-        <form id="world-generator-form" action='' class="w-75 m-5 border p-5 rounded-3 bg-info-subtle">
+        <form id='world-generator-form' action='' class='w-75 m-5 border p-5 rounded-3 bg-info-subtle'>
             <h3>Nature</h3>
-            <div id="nature-container" class=''>
+            <div id='nature-container' class=''>
                 <label for='nature-min-number-zones'>Minimum number of zones</label>
                 <input type='number' id='nature-min-number-zones' value='2' min='0'>
                 <br>
@@ -133,8 +117,8 @@
                 <input type='number' id='nature-total-max-size' value='800' min='0'>
             </div>
 
-            <h3 class="mt-5">Urban</h3>
-            <div id="urban-container" class=''>
+            <h3 class='mt-5'>Urban</h3>
+            <div id='urban-container' class=''>
                 <label for='urban-min-number-zones'>Minimum number of zones</label>
                 <input type='number' id='urban-min-number-zones' value='4' min='0'>
                 <br>
@@ -148,8 +132,8 @@
                 <input type='number' id='urban-total-max-size' value='800' min='0'>
             </div>
 
-            <h3 class="mt-5">Comercial</h3>
-            <div id="comercial-container" class=''>
+            <h3 class='mt-5'>Comercial</h3>
+            <div id='comercial-container' class=''>
                 <label for='comercial-min-number-zones'>Minimum number of zones</label>
                 <input type='number' id='comercial-min-number-zones' value='2' min='0'>
                 <br>
@@ -162,14 +146,14 @@
                 <label for='comercial-min-number-zones'>Total maximum size</label>
                 <input type='number' id='comercial-total-max-size' value='200' min='0'>
             </div>
-            <button id="generator" class="mt-5 btn btn-primary" type="button">Generate</button>
+            <button id='generator' class='mt-5 btn btn-primary' type='button'>Generate</button>
         </form>
 
-        <div id="container-resultado" class="d-flex flex-column align-items-center">
-            <div id="canvas"></div>
+        <div id='container-resultado' class='d-flex flex-column align-items-center'>
+            <div id='canvas'></div>
         </div>
     </main>    
-<script src="app.js"></script>
+<script src='app.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js' integrity='sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI' crossorigin='anonymous'></script>
 </body>
 </html>

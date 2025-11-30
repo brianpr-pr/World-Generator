@@ -1,5 +1,4 @@
 // Max number of squares: 3274
-
 document.addEventListener('DOMContentLoaded', function() {
     const canvas = document.getElementById('canvas');
     const worldGeneratorForm = document.getElementById('world-generator-form');
@@ -7,24 +6,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     button.addEventListener('click', function() {
         generateMap();
+        paintMap();
         
         
         //validateForm();
     });
 });
 
-
-
+//Work on algorithm to paint squares
 function generateMap(){
     for(let i = 1; i <= 4096; i++){
-        let div = document.createElement('div');
-        div.innerText = 18;
-        let classIdentifier = i;
-        div.classList.add('square',classIdentifier);
-        canvas.appendChild(div); 
+        let squareDiv = document.createElement('div');
+        squareDiv.id = i;
+        squareDiv.classList.add('square');
+        canvas.appendChild(squareDiv);
     }
 }
-
 
 /*
 const validateForm = () => { 
