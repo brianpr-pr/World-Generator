@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function generateMap(){
     for(let i = 1; i <= 4096; i++){
         let div = document.createElement('div');
+        //div.innerText = 1;
         let classIdentifier = i;
         div.classList.add('square',classIdentifier);
         canvas.appendChild(div); 
