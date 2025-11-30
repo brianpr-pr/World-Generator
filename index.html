@@ -42,20 +42,22 @@
 
     @media (min-width: 650px ) {
         #container-resultado{
-            width: 650px;
-            height: 900px;
+            width: 652px; 
+            height: 903px;
         }
 
         #canvas {
-            width: 90%;
-            height: 90%;
+            width: 95%;
+            height: 95%;
+            grid-template-columns: repeat(64, 9.64px);
+            grid-template-rows: repeat(64, 13.35px);
             border: 1px solid black;
             box-sizing: border-box;
         }
 
         .square {
-            width: 8px;
-            height: 8px;
+            width: 9.64px;
+            height: 13.35px;
             border: 0.42px solid red;
             font-size: 8px;
         }
@@ -63,23 +65,23 @@
 
     @media (min-width: 850px ) {
         #container-resultado{
-            width: 750px;
-            height: 950px;
+            width: 852px; 
+            height: 903px;
         }
 
         #canvas {
-            grid-template-columns: repeat(64, 10.54px);
+            width: 95%;
+            height: 95%;
+            grid-template-columns: repeat(64, 12.61px);
             grid-template-rows: repeat(64, 13.35px);
-            width: 90%;
-            height: 90%;
             border: 1px solid black;
             box-sizing: border-box;
         }
 
         .square {
-            width: 9.71px;
-            height: 12.84px;
-            border: 1px solid red;
+            width: 12.61px;
+            height: 13.35px;
+            border: 0.42px solid red;
             font-size: 8px;
         }
     }
