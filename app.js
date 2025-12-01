@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     button.addEventListener('click', function() {
         generateMap();
-        paintMap();
         
         
         //validateForm();
@@ -18,10 +17,13 @@ function generateMap(){
     for(let i = 1; i <= 4096; i++){
         let squareDiv = document.createElement('div');
         squareDiv.id = i;
-        squareDiv.classList.add('square');
+        if(getRandomInt(2) === 1){
+            squareDiv.classList.add('square');
+        }
         canvas.appendChild(squareDiv);
     }
 }
+
 
 /*
 const validateForm = () => { 
