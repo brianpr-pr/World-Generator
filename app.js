@@ -6,23 +6,61 @@ document.addEventListener('DOMContentLoaded', function() {
 
     button.addEventListener('click', function() {
         generateMap();
-        
-        
-        //validateForm();
+	paintSquares();
     });
 });
 
 //Work on algorithm to paint squares
 function generateMap(){
-    for(let i = 1; i <= 4096; i++){
+    for(let i = 1, n = 0; i <= 4096; i++){
         let squareDiv = document.createElement('div');
         squareDiv.id = i;
-        if(getRandomInt(2) === 1){
-            squareDiv.classList.add('square');
-        }
+	//squareDiv.classList.add('square');
         canvas.appendChild(squareDiv);
     }
+
 }
+
+function paintSquares(){
+	const startSquare = 2018;
+	let actualSquare = startSquare;
+	let movements = ['top', 'right', 'bottom','left'];
+	let numberOfSquaresPainted = 0;
+
+	while(numberOfSquaresPainted  < 3274){
+		//We generate a random move to access the array of movements
+		switch(movements[Math.floor(Math.random() * 4)]){
+		case 'top':
+		  actualSquare -= 64; 
+		  break;
+		case 'right':
+		  actualSquare  += 1;
+		  break;
+		case 'bottom':
+		  actualSquare  += 64;
+		  break;
+		case 'left':
+		  actualSquare  -= 1;
+		  break;
+		}
+
+
+		//Algorithm needs improvement to be able to paint the 3274 squares that are necessary.
+		if(document.getElementById(actualSquare) !== null){
+		  if(!document.getElementById(actualSquare).classList.contains('square')){
+		   console.log('Painting square');
+		   numberOfSquaresPainted++;
+		   document.getElementById(actualSquare).classList.add('square');
+		  }
+		}else{
+		  actualSquare = startSquare;
+		  console.log('Square doesnt exist');
+		}
+
+		console.log(numberOfSquaresPainted);
+	}
+}
+
 
 
 /*
