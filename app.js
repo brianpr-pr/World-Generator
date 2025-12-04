@@ -8,11 +8,13 @@ document.addEventListener('DOMContentLoaded', function() {
 	let isMapGenerated = false;
 	form.addEventListener('submit', function(event){
 		event.preventDefault();
+		calculateZones(form);
+		//validateAllInput(form, resultMessage);
 		
-		validateAllInput(form, resultMessage);
-		canvas.innerHTML = null;
-		generateMap();
-		paintSquares();
+		
+		//canvas.innerHTML = null;
+		//generateMap();
+		//paintSquares();
 	});
 });
 
@@ -46,6 +48,15 @@ function validateAllInput(form, resultMessage){
 	}
 
 	return 'Map created successfully.';
+}
+
+
+function calculateZones(form){
+	form.querySelectorAll('div').forEach((containerZone, index) => {
+		if(index !== 0){
+			console.log(containerZone);
+		}
+	});
 }
 
 function validateMap(mapContainer){
