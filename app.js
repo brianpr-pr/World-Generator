@@ -5,16 +5,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const button = document.getElementById('generator');
 	const form = document.getElementById('world-generator-form');
 	const resultMessage = document.getElementById('result-message');
-
+	let isMapGenerated = false;
 	form.addEventListener('submit', function(event){
 		event.preventDefault();
 		
 		validateAllInput(form, resultMessage);
-		
-		/*
+		canvas.innerHTML = null;
 		generateMap();
 		paintSquares();
-		*/
 	});
 });
 
@@ -24,10 +22,20 @@ function validateAllInput(form, resultMessage){
 	resultMessage.classList.remove('text-danger', 'text-success');
 
 	try{
-		validateMap(form.querySelector('#map-container'));
-		form.querySelectorAll('div').forEach( (containerZone) => {
-			console.log(containerZone);
+		let totalSquares = validateMap(form.querySelector('#map-container'));
+		let totalMinimumZones = 0;
+		form.querySelectorAll('div').forEach( (containerZone, index) => {
+			if(index !== 0){
+				validateRegion(containerZone);
+				totalMinimumZones += parseInt(containerZone.querySelectorAll('input')[0].value);
+			}
 		});
+		
+		console.log(totalSquares);
+		console.log(totalMinimumZones);
+		if(totalMinimumZones > totalSquares){
+			throw new Error(`The total amount of all minimum number of zones per region can't be superior to the amount of squares to paint`);
+		}
 
 		resultMessage.innerText = 'Map was created successfully';
 		resultMessage.classList.add('text-success');
@@ -65,6 +73,9 @@ function validateMap(mapContainer){
 	if( document.getElementById('size-map-squares') < 0){
 		throw new Error('Size of the map has to be at least 1 square');
 	}
+
+	//Return of the number of squares of the map that will be painted 
+	return Math.floor((parseInt(sizeMapSquares) ** 2 * parseInt(porcentageMap) / 100));
 }
 
 function validateRegion(container){
