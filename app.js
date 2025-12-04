@@ -8,15 +8,24 @@ document.addEventListener('DOMContentLoaded', function() {
 	let isMapGenerated = false;
 	form.addEventListener('submit', function(event){
 		event.preventDefault();
-		calculateZones(form);
+		const sizeOfMap = parseInt(form.querySelector('div').querySelectorAll('input')[0].value);
+		const porcentageOfMapUsed = parseInt(form.querySelector('div').querySelectorAll('input')[1].value);
+
+		const amountSquaresPainted = calculateMap(sizeOfMap, porcentageOfMapUsed);
+
+		const numberOfZonesPerSection = calculateZones(form);
+
 		//validateAllInput(form, resultMessage);
-		
-		
 		//canvas.innerHTML = null;
 		//generateMap();
 		//paintSquares();
 	});
 });
+
+function calculateMap(sizeOfMap, porcentageOfMapUsed){
+	return (sizeOfMap * porcentageOfMapUsed / 100);
+}
+
 
 //Validation of input
 function validateAllInput(form, resultMessage){
@@ -50,13 +59,37 @@ function validateAllInput(form, resultMessage){
 	return 'Map created successfully.';
 }
 
-
 function calculateZones(form){
+	const numberOfZonesPerSection = {'nature': 0, 'urban': 0, 'commerce': 0};
 	form.querySelectorAll('div').forEach((containerZone, index) => {
 		if(index !== 0){
-			console.log(containerZone);
+			const minimumNumberZones = parseInt(containerZone.querySelectorAll('input')[0].value);
+			const maximumNumberZones = parseInt(containerZone.querySelectorAll('input')[1].value);
+			let zoneMaximumSize = parseInt(containerZone.querySelectorAll('input')[2].value);
+			const totalMaximumSize = parseInt(containerZone.querySelectorAll('input')[3].value);
+
+			const numberOfZones = getRandom(minimumNumberZones, maximumNumberZones);
+
+			while((numberOfZones * zoneMaximumSize) > totalMaximumSize){
+				zoneMaximumSize = (zoneMaximumSize <= 1) ? 1 : (Math.round(zoneMaximumSize/2 ) );
+			}
+
+			switch(index){
+				case 1:
+					numberOfZonesPerSection.nature = (zoneMaximumSize * numberOfZones);
+					break;
+
+				case 2:
+					numberOfZonesPerSection.urban = (zoneMaximumSize * numberOfZones);
+					break;
+
+				case 3:
+					numberOfZonesPerSection.commerce = (zoneMaximumSize * numberOfZones);
+					break;
+			}
 		}
 	});
+	return numberOfZonesPerSection;
 }
 
 function validateMap(mapContainer){
@@ -202,4 +235,8 @@ function getRegularExpressionLiteral(option){
 		case 'onlyNumbersBiggerThanCero':
 			return /^[1-9][0-9]*$/;
 	}
+}
+
+function getRandom(min, max) {
+  return Math.round( Math.random() * (max - min) + min );
 }
