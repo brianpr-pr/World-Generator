@@ -47,71 +47,84 @@
     <header class='border bg-dark text-light text-center'>
         <h1 class='my-5 text-center'>World Generator</h1>
     </header>
-    <main class='d-flex flex-column align-items-center w-100'>
-        <h2 class='my-5'>Configurations of the generator</h2>
-        <form id='world-generator-form' action='' class='w-75 m-5 border p-5 rounded-3 bg-info-subtle'>
-            <h3>Map</h3>
-            <div id='map-container'>
-                <label for=''>Size of the map in squares</label>
-                <input id='size-map-squares' type='number' value='64' placeholder='64'>
-                <br>
-                <label for=''>Porcentage of the map to use</label>
-                <input id='porcentage-map' type='number' value='80' placeholder='80'>
-            </div>
-            <br>
-            <h3>Nature</h3>
-            <div id='nature-container' class=''>
-                <label for='nature-min-number-zones'>Minimum number of zones</label>
-                <input class="minimum-zones" type='number' id='nature-min-number-zones' value='1' min='0' placeholder='2'>
-                <br>
-                <label for='nature-min-number-zones'>Maximum number of zones</label>
-                <input class="maximum-zones" type='number' id='nature-max-number-zones' value='1' min='0' placeholder='8'>
-                <br>                
-                <label for='nature-min-number-zones'>Zone maximum size</label>
-                <input class="zone-maximum-size" type='number' id='nature-zone-max-size' value='800' min='0' placeholder='500'>
-                <br>
-                <label for='nature-min-number-zones'>Total maximum size</label>
-                <input class="total-maximum-size" type='number' id='nature-total-max-size' value='800' min='0' placeholder='800'>
-            </div>
+    <main class="container my-5">
 
-            <h3 class='mt-5'>Urban</h3>
-            <div id='urban-container' class=''>
-                <label for='urban-min-number-zones'>Minimum number of zones</label>
-                <input type='number' id='urban-min-number-zones' value='1' min='0' placeholder='4'>
-                <br>
-                <label for='urban-min-number-zones'>Maximum number of zones</label>
-                <input type='number' id='urban-max-number-zones' value='1' min='0' placeholder='6'>
-                <br>                
-                <label for='urban-min-number-zones'>Zone maximum size</label>
-                <input type='number' id='urban-zone-max-size' value='800' min='0' placeholder='100'>
-                <br>
-                <label for='urban-min-number-zones'>Total maximum size</label>
-                <input type='number' id='urban-total-max-size' value='800' min='0' placeholder='800'>
-            </div>
+    <!-- Title always on top -->
+    <h2 class="text-center my-5">Configurations of the generator</h2>
 
-            <h3 class='mt-5'>Commerce</h3>
-            <div id='commerce-container' class=''>
-                <label for='commerce-min-number-zones'>Minimum number of zones</label>
-                <input type='number' id='commerce-min-number-zones' value='1' min='0' placeholder='2'>
-                <br>
-                <label for='commerce-min-number-zones'>Maximum number of zones</label>
-                <input type='number' id='commerce-max-number-zones' value='1' min='0' placeholder='8'>
-                <br>                
-                <label for='commerce-min-number-zones'>Zone maximum size</label>
-                <input type='number' id='commerce-zone-max-size' value='200' min='0' placeholder='50'>
-                <br>
-                <label for='commerce-min-number-zones'>Total maximum size</label>
-                <input type='number' id='commerce-total-max-size' value='200' min='0' placeholder='200'>
-            </div>
-            <button id='generator' class='mt-5 btn btn-primary' type='submit'>Generate</button>
-        </form>
+    <!-- Row that switches from column to two columns at XL -->
+    <div class="row">
 
-        <div id='container-resultado' class='d-flex flex-column align-items-center'>
-            <div id='canvas'></div>
+        <!-- Left column: form -->
+        <div class="col-12 col-xl-6 d-flex justify-content-center">
+            <form id="world-generator-form" 
+                  class="w-100 border p-5 rounded-3 bg-info-subtle">
+                <h3>Map</h3>
+                <div id='map-container'>
+                    <label>Size of the map in squares</label>
+                    <input id='size-map-squares' type='number' value='64'>
+                    <br>
+                    <label>Percentage of the map to use</label>
+                    <input id='porcentage-map' type='number' value='80'>
+                </div>
+
+                <h3 class='mt-5'>Nature</h3>
+                <div id='nature-container'>
+                    <label>Minimum number of zones</label>
+                    <input class="minimum-zones" type='number' id='nature-min-number-zones' value='1'>
+                    <br>
+                    <label>Maximum number of zones</label>
+                    <input class="maximum-zones" type='number' id='nature-max-number-zones' value='1'>
+                    <br>
+                    <label>Zone maximum size</label>
+                    <input class="zone-maximum-size" type='number' id='nature-zone-max-size' value='800'>
+                    <br>
+                    <label>Total maximum size</label>
+                    <input class="total-maximum-size" type='number' id='nature-total-max-size' value='800'>
+                </div>
+
+                <h3 class='mt-5'>Urban</h3>
+                <div id='urban-container'>
+                    <label>Minimum number of zones</label>
+                    <input type='number' id='urban-min-number-zones' value='1'>
+                    <br>
+                    <label>Maximum number of zones</label>
+                    <input type='number' id='urban-max-number-zones' value='1'>
+                    <br>
+                    <label>Zone maximum size</label>
+                    <input type='number' id='urban-zone-max-size' value='800'>
+                    <br>
+                    <label>Total maximum size</label>
+                    <input type='number' id='urban-total-max-size' value='800'>
+                </div>
+
+                <h3 class='mt-5'>Commerce</h3>
+                <div id='commerce-container'>
+                    <label>Minimum number of zones</label>
+                    <input type='number' id='commerce-min-number-zones' value='1'>
+                    <br>
+                    <label>Maximum number of zones</label>
+                    <input type='number' id='commerce-max-number-zones' value='1'>
+                    <br>
+                    <label>Zone maximum size</label>
+                    <input type='number' id='commerce-zone-max-size' value='200'>
+                    <br>
+                    <label>Total maximum size</label>
+                    <input type='number' id='commerce-total-max-size' value='200'>
+                </div>
+
+                <button id='generator' class='mt-5 btn btn-primary' type='submit'>Generate</button>
+            </form>
         </div>
 
-        <div><p id='result-message' class='fs-2'></p></div>
-    </main>    
+        <!-- Right column: canvas/result -->
+        <div id="container-resultado" class="col-12 col-xl-6 d-flex flex-column align-items-center mt-5 mt-xl-0">
+            <div id="canvas"></div>
+            <p id="result-message" class="fs-2"></p>
+        </div>
+
+    </div>
+</main>   
 <script src='app.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js' integrity='sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI' crossorigin='anonymous'></script>
 </body>
