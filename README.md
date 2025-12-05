@@ -12,8 +12,6 @@ Algorithm to generate the number of zones for each section:
 For each container:
 
 
-
-
 1. Generation of n zones, being n a number larger or equal than the minimum stablished by the user and smaller or equal than the maximum number of zones.
 
 2. Establishment of amount of squares for each zone, we first validate that the product of the factors:

@@ -8,24 +8,95 @@ document.addEventListener('DOMContentLoaded', function() {
 	let isMapGenerated = false;
 	form.addEventListener('submit', function(event){
 		event.preventDefault();
-		const sizeOfMap = parseInt(form.querySelector('div').querySelectorAll('input')[0].value);
+		canvas.innerHTML = null;		
+		validateAllInput(form, resultMessage);
+		const sizeOfMap = parseInt(form.querySelector('div').querySelectorAll('input')[0].value) ** 2;
 		const porcentageOfMapUsed = parseInt(form.querySelector('div').querySelectorAll('input')[1].value);
-
+		
 		const amountSquaresPainted = calculateMap(sizeOfMap, porcentageOfMapUsed);
 
-		const numberOfZonesPerSection = calculateZones(form);
+		const sectionsZoneData = calculateSectionsZonesData(form);
 
-		//validateAllInput(form, resultMessage);
-		//canvas.innerHTML = null;
-		//generateMap();
-		//paintSquares();
+		//Testing
+		calculateTotalPainted(sectionsZoneData, amountSquaresPainted);
+
+		generateMap(sizeOfMap);
+		//correctsectionsZoneData(sectionsZoneData, amountSquaresPainted);
+		paintSquares(amountSquaresPainted, sectionsZoneData);
 	});
 });
 
-function calculateMap(sizeOfMap, porcentageOfMapUsed){
-	return (sizeOfMap * porcentageOfMapUsed / 100);
+function paintSquares(amountSquaresPainted, sectionsZoneData){
+	const startingSquare = Math.floor(amountSquaresPainted / 2);
+	let zonesAlreadyPainted = 0;
+	sectionsZoneData.commerce.forEach( (amountSquaresToPaint) => {
+		paintZone('orange', (zonesAlreadyPainted+1), amountSquaresToPaint, startingSquare);
+		zonesAlreadyPainted++;
+	});
+
+	sectionsZoneData.urban.forEach( (amountSquaresToPaint) => {
+		paintZone('yellow', (zonesAlreadyPainted+1), amountSquaresToPaint, startingSquare);
+		zonesAlreadyPainted++;
+	});
+
+	sectionsZoneData.nature.forEach( (amountSquaresToPaint) => {
+		paintZone('green', (zonesAlreadyPainted+1), amountSquaresToPaint, startingSquare);
+		zonesAlreadyPainted++;
+	});
 }
 
+function paintZone(colorOfSquare, zoneNumber, amountSquaresToPaint, startingSquare){
+	let actualSquare = startingSquare;
+	let movements = ['top', 'right', 'left', 'bottom'];
+	let numberOfSquaresPainted = 0;
+
+	while(numberOfSquaresPainted  < amountSquaresToPaint){
+		//We generate a random move to access the array of movements
+		switch(movements[Math.floor(Math.random() * 4)]){
+			case 'top':
+				actualSquare -= 64;
+				break;
+
+			case 'right':
+				actualSquare  += 1;
+				break;
+
+			case 'left':
+				actualSquare  -= 1;
+				break;
+
+			case 'bottom':
+				actualSquare  += 64;
+				break;
+		}
+
+		if(document.getElementById(actualSquare) !== null){
+		  if(!document.getElementById(actualSquare).classList.contains('square')){
+		   numberOfSquaresPainted++;
+		   document.getElementById(actualSquare).classList.add('square');
+		   document.getElementById(actualSquare).style.backgroundColor = colorOfSquare;
+		   document.getElementById(actualSquare).innerText = zoneNumber;
+		  }
+		}else{
+		  actualSquare = startingSquare;
+		}
+	}
+}
+
+//Work on algorithm to paint squares
+//document.documentElement.style.setProperty('--my-color', 'tomato');
+function generateMap(sizeOfMap){
+    for(let i = 1, n = 0; i <= sizeOfMap; i++){
+        let squareDiv = document.createElement('div');
+        squareDiv.id = i;
+		//squareDiv.classList.add('square');
+        canvas.appendChild(squareDiv);
+    }
+}
+
+function calculateMap(sizeOfMap, porcentageOfMapUsed){
+	return Math.round(sizeOfMap * porcentageOfMapUsed / 100);
+}
 
 //Validation of input
 function validateAllInput(form, resultMessage){
@@ -42,8 +113,6 @@ function validateAllInput(form, resultMessage){
 			}
 		});
 		
-		console.log(totalSquares);
-		console.log(totalMinimumZones);
 		if(totalMinimumZones > totalSquares){
 			throw new Error(`The total amount of all minimum number of zones per region can't be superior to the amount of squares to paint`);
 		}
@@ -51,7 +120,6 @@ function validateAllInput(form, resultMessage){
 		resultMessage.innerText = 'Map was created successfully';
 		resultMessage.classList.add('text-success');
 	}catch(e){
-		console.log(e)
 		resultMessage.innerText = e;
 		resultMessage.classList.add('text-danger');
 	}
@@ -59,8 +127,9 @@ function validateAllInput(form, resultMessage){
 	return 'Map created successfully.';
 }
 
-function calculateZones(form){
-	const numberOfZonesPerSection = {'nature': 0, 'urban': 0, 'commerce': 0};
+function calculateSectionsZonesData(form){
+	const sectionsZoneData = {'nature': [], 'urban': [], 'commerce': []};
+
 	form.querySelectorAll('div').forEach((containerZone, index) => {
 		if(index !== 0){
 			const minimumNumberZones = parseInt(containerZone.querySelectorAll('input')[0].value);
@@ -70,26 +139,37 @@ function calculateZones(form){
 
 			const numberOfZones = getRandom(minimumNumberZones, maximumNumberZones);
 
+			//If the possible number is bigger than the setted total limit, we divide by 2 the value of limit size per zone
 			while((numberOfZones * zoneMaximumSize) > totalMaximumSize){
-				zoneMaximumSize = (zoneMaximumSize <= 1) ? 1 : (Math.round(zoneMaximumSize/2 ) );
+				zoneMaximumSize = (zoneMaximumSize <= 1) ? 1 : (Math.round(zoneMaximumSize* 0.95 ) );
 			}
 
 			switch(index){
 				case 1:
-					numberOfZonesPerSection.nature = (zoneMaximumSize * numberOfZones);
+					sectionsZoneData.nature = generateSizesForZones(numberOfZones, zoneMaximumSize);
 					break;
 
 				case 2:
-					numberOfZonesPerSection.urban = (zoneMaximumSize * numberOfZones);
+					sectionsZoneData.urban = generateSizesForZones(numberOfZones, zoneMaximumSize);
 					break;
 
 				case 3:
-					numberOfZonesPerSection.commerce = (zoneMaximumSize * numberOfZones);
+					sectionsZoneData.commerce = generateSizesForZones(numberOfZones, zoneMaximumSize);
 					break;
 			}
 		}
 	});
-	return numberOfZonesPerSection;
+
+	return sectionsZoneData;
+}
+
+function generateSizesForZones(numberOfZones, zoneMaximumSize){
+//Creation of the zones sizes of each section
+let arrZonesSizes = [];
+for(let i = 0; i < numberOfZones; i++){
+	arrZonesSizes.push(getRandom(1, zoneMaximumSize));
+}
+return arrZonesSizes;
 }
 
 function validateMap(mapContainer){
@@ -173,60 +253,6 @@ function validateRegion(container){
 	}
 }
 
-//Work on algorithm to paint squares
-//document.documentElement.style.setProperty('--my-color', 'tomato');
-function generateMap(){
-    for(let i = 1, n = 0; i <= 4096; i++){
-        let squareDiv = document.createElement('div');
-        squareDiv.id = i;
-	//squareDiv.classList.add('square');
-        canvas.appendChild(squareDiv);
-    }
-}
-
-function paintSquares(){
-	const startSquare = 2048;
-	let actualSquare = startSquare;
-	let movements = ['top', 'right', 'left', 'bottom'];
-	let numberOfSquaresPainted = 0;
-
-	while(numberOfSquaresPainted  < 3274){
-		//We generate a random move to access the array of movements
-		
-		switch(movements[Math.floor(Math.random() * 4)]){
-			case 'top':
-				actualSquare -= 64;
-				break;
-
-			case 'right':
-				actualSquare  += 1;
-				break;
-
-			case 'left':
-				actualSquare  -= 1;
-				break;
-
-			case 'bottom':
-				actualSquare  += 64;
-				break;
-		}
-
-		//Algorithm needs improvement to be able to paint the 3274 squares that are necessary.
-		if(document.getElementById(actualSquare) !== null){
-		  if(!document.getElementById(actualSquare).classList.contains('square')){
-		   console.log('Painting square');
-		   numberOfSquaresPainted++;
-		   document.getElementById(actualSquare).classList.add('square');
-		  }
-		}else{
-		  actualSquare = startSquare;
-		  console.log('Square doesnt exist');
-		}
-
-		console.log(numberOfSquaresPainted);
-	}
-}
-
 //Auxiliar function that returns a regular expression literal
 function getRegularExpressionLiteral(option){
 	switch(option){
@@ -237,6 +263,23 @@ function getRegularExpressionLiteral(option){
 	}
 }
 
-function getRandom(min, max) {
+function getRandom(min, max){
   return Math.round( Math.random() * (max - min) + min );
+}
+
+function calculateTotalPainted(sectionsZoneData, totalAmountSettedByUser){
+	let result = 0;
+	sectionsZoneData.nature.forEach( numberOfSquares => {
+		result+=numberOfSquares
+	});
+
+	sectionsZoneData.urban.forEach( numberOfSquares => {
+		result+=numberOfSquares
+	});
+	
+	sectionsZoneData.commerce.forEach( numberOfSquares => {
+		result+=numberOfSquares
+	});
+	console.log(result);
+	console.log(totalAmountSettedByUser);
 }
