@@ -6,11 +6,15 @@ document.addEventListener('DOMContentLoaded', function() {
 	const form = document.getElementById('world-generator-form');
 	const resultMessage = document.getElementById('result-message');
 	let isMapGenerated = false;
+
 	form.addEventListener('submit', function(event){
 		event.preventDefault();
-		canvas.innerHTML = null;		
+		canvas.innerHTML = null;	
 		validateAllInput(form, resultMessage);
-		const sizeOfMap = parseInt(form.querySelector('div').querySelectorAll('input')[0].value) ** 2;
+		const lengthOfMap = parseInt(form.querySelector('div').querySelectorAll('input')[0].value);
+		//console.log(lengthOfMap);
+		
+		const sizeOfMap = lengthOfMap ** 2;
 		const porcentageOfMapUsed = parseInt(form.querySelector('div').querySelectorAll('input')[1].value);
 		
 		const amountSquaresPainted = calculateMap(sizeOfMap, porcentageOfMapUsed);
@@ -22,31 +26,31 @@ document.addEventListener('DOMContentLoaded', function() {
 		//console.log('Amount of squares that will actually be painted: ' + calculateTotalSquaresFromSections(sectionsZoneData) );
 
 		generateMap(sizeOfMap);
-		//modifyValuesCSSVariables(form.querySelector('div').querySelectorAll('input')[0].value);
-		paintSquares(amountSquaresPainted, sectionsZoneData);
-	});
+		modifyValuesCSSVariables(lengthOfMap);
+		paintSquares(amountSquaresPainted, sectionsZoneData, lengthOfMap);
+	  });
 });
 
-function paintSquares(amountSquaresPainted, sectionsZoneData){
+function paintSquares(amountSquaresPainted, sectionsZoneData, lengthOfMap){
 	const startingSquare = Math.floor(amountSquaresPainted / 2);
 	let zonesAlreadyPainted = 0;
 	sectionsZoneData.commerce.forEach( (amountSquaresToPaint) => {
-		paintZone('orange', (zonesAlreadyPainted+1), amountSquaresToPaint, startingSquare);
+		paintZone('orange', (zonesAlreadyPainted+1), amountSquaresToPaint, startingSquare, lengthOfMap);
 		zonesAlreadyPainted++;
 	});
 
 	sectionsZoneData.urban.forEach( (amountSquaresToPaint) => {
-		paintZone('yellow', (zonesAlreadyPainted+1), amountSquaresToPaint, startingSquare);
+		paintZone('yellow', (zonesAlreadyPainted+1), amountSquaresToPaint, startingSquare, lengthOfMap);
 		zonesAlreadyPainted++;
 	});
 
 	sectionsZoneData.nature.forEach( (amountSquaresToPaint) => {
-		paintZone('green', (zonesAlreadyPainted+1), amountSquaresToPaint, startingSquare);
+		paintZone('green', (zonesAlreadyPainted+1), amountSquaresToPaint, startingSquare, lengthOfMap);
 		zonesAlreadyPainted++;
 	});
 }
 
-function paintZone(colorOfSquare, zoneNumber, amountSquaresToPaint, startingSquare){
+function paintZone(colorOfSquare, zoneNumber, amountSquaresToPaint, startingSquare, lengthOfMap){
 	let actualSquare = startingSquare;
 	let movements = ['top', 'right', 'left', 'bottom'];
 	let numberOfSquaresPainted = 0;
@@ -55,7 +59,7 @@ function paintZone(colorOfSquare, zoneNumber, amountSquaresToPaint, startingSqua
 		//We generate a random move to access the array of movements
 		switch(movements[Math.floor(Math.random() * 4)]){
 			case 'top':
-				actualSquare -= 64;
+				actualSquare -= lengthOfMap;
 				break;
 
 			case 'right':
@@ -67,7 +71,7 @@ function paintZone(colorOfSquare, zoneNumber, amountSquaresToPaint, startingSqua
 				break;
 
 			case 'bottom':
-				actualSquare  += 64;
+				actualSquare  += lengthOfMap;
 				break;
 		}
 
@@ -169,7 +173,7 @@ function calculateSectionsZonesData(form, amountSquaresPainted){
 				if(sectionsZoneData.nature.length > 1){
 					sectionsZoneData.nature.pop();
 				}else{
-					sectionsZoneData.nature[0] = Math.round(sectionsZoneData.nature[0] * 0.95);
+					sectionsZoneData.nature[0] = Math.round(sectionsZoneData.nature[0] * 0.60);
 				}
 				section = 'urban';
 				break;
@@ -177,7 +181,7 @@ function calculateSectionsZonesData(form, amountSquaresPainted){
 				if(sectionsZoneData.urban.length > 1){
 					sectionsZoneData.urban.pop();
 				}else{
-					sectionsZoneData.urban[0] = Math.round(sectionsZoneData.urban[0] * 0.95);
+					sectionsZoneData.urban[0] = Math.round(sectionsZoneData.urban[0] * 0.60);
 				}
 				section = 'commerce';
 				break;
@@ -185,7 +189,7 @@ function calculateSectionsZonesData(form, amountSquaresPainted){
 				if(sectionsZoneData.commerce.length > 1){
 					sectionsZoneData.commerce.pop();
 				}else{
-					sectionsZoneData.commerce[0] = Math.round(sectionsZoneData.commerce[0] * 0.95);
+					sectionsZoneData.commerce[0] = Math.round(sectionsZoneData.commerce[0] * 0.60);
 				}
 				section  = 'nature';
 				break;
@@ -314,10 +318,13 @@ function calculateTotalSquaresFromSections(sectionsZoneData){
 	});
 	return result;
 }
-/*
+
 function modifyValuesCSSVariables(lengthOfMap){
-	const a = 0;
+	const sizeSquare = (300 * 0.95) / lengthOfMap;
+	console.log(sizeSquare);
 	document.documentElement.style.setProperty("--length-map", lengthOfMap);
+	document.documentElement.style.setProperty("--sm-size", `${sizeSquare}px`);
+	document.documentElement.style.setProperty("--sm-font-size", `${sizeSquare * 0.75}px`);
 	//console.log(lengthOfMap);
 	//console.log('Modifying size of variables');
-}*/
+}
