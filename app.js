@@ -14,11 +14,11 @@ document.addEventListener('DOMContentLoaded', function() {
 		const porcentageOfMapUsed = parseInt(form.querySelector('div').querySelectorAll('input')[1].value);
 		
 		const amountSquaresPainted = calculateMap(sizeOfMap, porcentageOfMapUsed);
-
-		const sectionsZoneData = calculateSectionsZonesData(form);
-
+		console.log('Limit of size that we can paint: ' + amountSquaresPainted);
+		let sectionsZoneData = calculateSectionsZonesData(form, amountSquaresPainted);
+		console.log('Amount of squares that will actually be painted: ' + calculateTotalSquaresFromSections(sectionsZoneData) );
 		//Testing
-		calculateTotalPainted(sectionsZoneData, amountSquaresPainted);
+		//calculateTotalPainted(sectionsZoneData, amountSquaresPainted);
 
 		generateMap(sizeOfMap);
 		//correctsectionsZoneData(sectionsZoneData, amountSquaresPainted);
@@ -127,8 +127,8 @@ function validateAllInput(form, resultMessage){
 	return 'Map created successfully.';
 }
 
-function calculateSectionsZonesData(form){
-	const sectionsZoneData = {'nature': [], 'urban': [], 'commerce': []};
+function calculateSectionsZonesData(form, amountSquaresPainted){
+	let sectionsZoneData = {'nature': [], 'urban': [], 'commerce': []};
 
 	form.querySelectorAll('div').forEach((containerZone, index) => {
 		if(index !== 0){
@@ -140,9 +140,9 @@ function calculateSectionsZonesData(form){
 			const numberOfZones = getRandom(minimumNumberZones, maximumNumberZones);
 
 			//If the possible number is bigger than the setted total limit, we divide by 2 the value of limit size per zone
-			while((numberOfZones * zoneMaximumSize) > totalMaximumSize){
+			/*while((numberOfZones * zoneMaximumSize) > totalMaximumSize){
 				zoneMaximumSize = (zoneMaximumSize <= 1) ? 1 : (Math.round(zoneMaximumSize* 0.95 ) );
-			}
+			}*/
 
 			switch(index){
 				case 1:
@@ -157,7 +157,26 @@ function calculateSectionsZonesData(form){
 					sectionsZoneData.commerce = generateSizesForZones(numberOfZones, zoneMaximumSize);
 					break;
 			}
+
+			//Algorithm to try to increase the number of squares that will be generated
+			/*
+			if(calculateTotalSquaresFromSections(sectionsZoneData) < amountSquaresPainted){
+				//console.log(calculateTotalSquaresFromSections(sectionsZoneData));
+				//console.log(amountSquaresPainted);
+				let rest = amountSquaresPainted - calculateTotalSquaresFromSections(sectionsZoneData);
+
+				sectionsZoneData.nature.forEach( zoneSize => {
+					if(zoneSize < zoneMaximumSize){
+						let sumUntilLimit = zoneMaximumSize - zoneSize;
+						if(rest > sumUntilLimit){
+							zoneSize += sumUntilLimit;
+							rest -= sumUntilLimit;
+						}
+					}
+				});
+			}*/
 		}
+
 	});
 
 	return sectionsZoneData;
@@ -267,7 +286,7 @@ function getRandom(min, max){
   return Math.round( Math.random() * (max - min) + min );
 }
 
-function calculateTotalPainted(sectionsZoneData, totalAmountSettedByUser){
+function calculateTotalSquaresFromSections(sectionsZoneData){
 	let result = 0;
 	sectionsZoneData.nature.forEach( numberOfSquares => {
 		result+=numberOfSquares
@@ -280,6 +299,5 @@ function calculateTotalPainted(sectionsZoneData, totalAmountSettedByUser){
 	sectionsZoneData.commerce.forEach( numberOfSquares => {
 		result+=numberOfSquares
 	});
-	console.log(result);
-	console.log(totalAmountSettedByUser);
+	return result;
 }
