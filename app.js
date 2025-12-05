@@ -14,17 +14,15 @@ document.addEventListener('DOMContentLoaded', function() {
 		const porcentageOfMapUsed = parseInt(form.querySelector('div').querySelectorAll('input')[1].value);
 		
 		const amountSquaresPainted = calculateMap(sizeOfMap, porcentageOfMapUsed);
-		console.log('Limit of size that we can paint: ' + amountSquaresPainted);
+		//console.log('Limit of size that we can paint: ' + amountSquaresPainted);
 		
 		//This function needs to change
 		let sectionsZoneData = calculateSectionsZonesData(form, amountSquaresPainted);
 
-		console.log('Amount of squares that will actually be painted: ' + calculateTotalSquaresFromSections(sectionsZoneData) );
-		//Testing
-		//calculateTotalPainted(sectionsZoneData, amountSquaresPainted);
+		//console.log('Amount of squares that will actually be painted: ' + calculateTotalSquaresFromSections(sectionsZoneData) );
 
 		generateMap(sizeOfMap);
-		//correctsectionsZoneData(sectionsZoneData, amountSquaresPainted);
+		//modifyValuesCSSVariables(form.querySelector('div').querySelectorAll('input')[0].value);
 		paintSquares(amountSquaresPainted, sectionsZoneData);
 	});
 });
@@ -101,7 +99,6 @@ function calculateMap(sizeOfMap, porcentageOfMapUsed){
 	return Math.round(sizeOfMap * porcentageOfMapUsed / 100);
 }
 
-//Validation of input
 function validateAllInput(form, resultMessage){
 	resultMessage.innerText = null;
 	resultMessage.classList.remove('text-danger', 'text-success');
@@ -199,12 +196,12 @@ function calculateSectionsZonesData(form, amountSquaresPainted){
 }
 
 function generateSizesForZones(numberOfZones, zoneMaximumSize){
-//Creation of the zones sizes of each section
-let arrZonesSizes = [];
-for(let i = 0; i < numberOfZones; i++){
-	arrZonesSizes.push(zoneMaximumSize);
-}
-return arrZonesSizes;
+	//Creation of the zones sizes of each section
+	let arrZonesSizes = [];
+	for(let i = 0; i < numberOfZones; i++){
+		arrZonesSizes.push(zoneMaximumSize);
+	}
+	return arrZonesSizes;
 }
 
 function validateMap(mapContainer){
@@ -317,3 +314,10 @@ function calculateTotalSquaresFromSections(sectionsZoneData){
 	});
 	return result;
 }
+/*
+function modifyValuesCSSVariables(lengthOfMap){
+	const a = 0;
+	document.documentElement.style.setProperty("--length-map", lengthOfMap);
+	//console.log(lengthOfMap);
+	//console.log('Modifying size of variables');
+}*/

@@ -7,9 +7,9 @@
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB' crossorigin='anonymous'>
     <style>
         :root{
-            --small: 22px;
-            --medium: var(--small);
-            --large: 
+            --length-map: 64;
+            --sm-size: 4.45px;
+            --sm-font-size: 3px;
         }
 
         *{
@@ -18,19 +18,18 @@
         }
 
         #container-resultado{
-            width: 303px;
-            height: 303px;
+            width: 305px;
+            height: 305px;
             margin-bottom: 50px;
         }
 
         #canvas {
             display: grid;
-            grid-template-columns: repeat(64, 4.45px);
-            grid-template-rows: repeat(64, 4.45px);
+            grid-template-columns: repeat(var(--length-map), var(--sm-size));
+            grid-template-rows: repeat(var(--length-map), var(--sm-size));
             width: 95%;
             height: 95%;
             box-sizing: border-box;
-            border:2px solid black;
         }
 
         .square {
@@ -38,13 +37,12 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            width: 4.24px;
-            height: 4.24px;
-            border: 0.21px solid black;
-            font-size: 3px;
+            width: var(--sm-size);
+            height: var(--sm-size);
+            font-size: var(--sm-font-size);
         }
 
-
+/*
     @media (min-width: 650px ) {
         #container-resultado{
             width: 652px; 
@@ -80,7 +78,7 @@
             height: 12.64px;
         }
     }
-    
+    */
     </style>
 </head>
 <body class='bg-warning-subtle w-100'>
