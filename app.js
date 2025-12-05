@@ -15,7 +15,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		const amountSquaresPainted = calculateMap(sizeOfMap, porcentageOfMapUsed);
 		console.log('Limit of size that we can paint: ' + amountSquaresPainted);
+		
+		//This function needs to change
 		let sectionsZoneData = calculateSectionsZonesData(form, amountSquaresPainted);
+
 		console.log('Amount of squares that will actually be painted: ' + calculateTotalSquaresFromSections(sectionsZoneData) );
 		//Testing
 		//calculateTotalPainted(sectionsZoneData, amountSquaresPainted);
@@ -140,9 +143,9 @@ function calculateSectionsZonesData(form, amountSquaresPainted){
 			const numberOfZones = getRandom(minimumNumberZones, maximumNumberZones);
 
 			//If the possible number is bigger than the setted total limit, we divide by 2 the value of limit size per zone
-			/*while((numberOfZones * zoneMaximumSize) > totalMaximumSize){
+			while((numberOfZones * zoneMaximumSize) > totalMaximumSize){
 				zoneMaximumSize = (zoneMaximumSize <= 1) ? 1 : (Math.round(zoneMaximumSize* 0.95 ) );
-			}*/
+			}
 
 			switch(index){
 				case 1:
@@ -157,27 +160,40 @@ function calculateSectionsZonesData(form, amountSquaresPainted){
 					sectionsZoneData.commerce = generateSizesForZones(numberOfZones, zoneMaximumSize);
 					break;
 			}
-
-			//Algorithm to try to increase the number of squares that will be generated
-			/*
-			if(calculateTotalSquaresFromSections(sectionsZoneData) < amountSquaresPainted){
-				//console.log(calculateTotalSquaresFromSections(sectionsZoneData));
-				//console.log(amountSquaresPainted);
-				let rest = amountSquaresPainted - calculateTotalSquaresFromSections(sectionsZoneData);
-
-				sectionsZoneData.nature.forEach( zoneSize => {
-					if(zoneSize < zoneMaximumSize){
-						let sumUntilLimit = zoneMaximumSize - zoneSize;
-						if(rest > sumUntilLimit){
-							zoneSize += sumUntilLimit;
-							rest -= sumUntilLimit;
-						}
-					}
-				});
-			}*/
 		}
 
 	});
+
+	for(let section = 'nature'; calculateTotalSquaresFromSections(sectionsZoneData) > amountSquaresPainted;){
+		console.log(calculateTotalSquaresFromSections(sectionsZoneData) );
+
+		switch(section){
+			case 'nature':
+				if(sectionsZoneData.nature.length > 1){
+					sectionsZoneData.nature.pop();
+				}else{
+					sectionsZoneData.nature[0] = Math.round(sectionsZoneData.nature[0] * 0.95);
+				}
+				section = 'urban';
+				break;
+			case 'urban':
+				if(sectionsZoneData.urban.length > 1){
+					sectionsZoneData.urban.pop();
+				}else{
+					sectionsZoneData.urban[0] = Math.round(sectionsZoneData.urban[0] * 0.95);
+				}
+				section = 'commerce';
+				break;
+			case 'commerce':
+				if(sectionsZoneData.commerce.length > 1){
+					sectionsZoneData.commerce.pop();
+				}else{
+					sectionsZoneData.commerce[0] = Math.round(sectionsZoneData.commerce[0] * 0.95);
+				}
+				section  = 'nature';
+				break;
+		}
+	}
 
 	return sectionsZoneData;
 }
@@ -186,7 +202,7 @@ function generateSizesForZones(numberOfZones, zoneMaximumSize){
 //Creation of the zones sizes of each section
 let arrZonesSizes = [];
 for(let i = 0; i < numberOfZones; i++){
-	arrZonesSizes.push(getRandom(1, zoneMaximumSize));
+	arrZonesSizes.push(zoneMaximumSize);
 }
 return arrZonesSizes;
 }
